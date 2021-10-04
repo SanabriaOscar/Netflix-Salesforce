@@ -1,0 +1,23 @@
+@isTest
+public class DataClassFactory {
+    
+    
+    
+    public static List<Contact> AddContact(){
+        
+        List<Contact> Listacons = new List<Contact>();
+        Contact Mycontact = new Contact(FirstName ='jesus', LastName='tavera', Email='sanabriaoscarj@gmail.com');
+        Listacons.add(Mycontact);
+        return Listacons;
+    }
+        
+        public static List<Subscripcion__c> AddSubscription(List<Contact> Listacons){
+        List<Subscripcion__c> subsList = new List<Subscripcion__c>();
+        for(Integer i = 0; i < Listacons.size(); i++){
+            subsList.add(new Subscripcion__c(Name = 'prueba subs' + (i+1), Contact__c = Listacons[i].Id, status__c = 'active', 
+                                                    subscriptionDate__c = date.parse('23/09/2021'), subscriptionPackage__c = '1 Month', cancelationDate__c = date.parse( '23/09/2022'))); 
+        }
+        return subsList;
+    }
+                     
+}

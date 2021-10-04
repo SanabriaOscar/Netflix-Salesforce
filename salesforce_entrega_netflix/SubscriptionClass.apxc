@@ -1,0 +1,14 @@
+public class SubscriptionClass {
+    
+
+     public  List<Subscripcion__c> getSubscripcions(){
+        return [Select Id, Name, status__c, subscriptionDate__c, subscriptionPackage__c, cancelationDate__c  From Subscripcion__c];
+    }
+    
+     public  List<Contact> getContacts(){
+        return [Select Id, FirstName, LastName, Email From Contact];
+    }
+    
+    
+    
+}

@@ -1,0 +1,89 @@
+@RestResource(urlMapping='/subscripcions/*')
+global with sharing class suscripcionRest {  @HttpGet
+    global static MessageDefault_JSON getSubscripcions(){
+        
+       MessageDefault_JSON RTA = new MessageDefault_JSON();
+        RTA.subscripcions = [Select Id, Name, status__c, subscriptionDate__c, subscriptionPackage__c
+                			From Subscripcion__c];
+        RTA.statusCode = 200;
+        RTA.isError = false;
+        return RTA;
+    }
+    
+    @HttpPost
+    global static  MessageDefault_JSON  doPost(String contacto, String nombre, String estado, Date fechaS,  String paquete, Date fechaC){
+        
+        MessageDefault_JSON RTA = new MessageDefault_JSON();
+        try{
+            Subscripcion__c myS = new Subscripcion__c(Contact__c =contacto, Name = nombre, status__c = estado, 
+              subscriptionDate__c =fechaS, subscriptionPackage__c =paquete, cancelationDate__c = fechaC);
+        	insert myS;
+            
+            RTA.subscripcions = new List<subscripcion__c>{myS};
+            RTA.statusCode = 200;
+            RTA.isError = false;
+        }catch(Exception e){
+            System.debug(e);
+            RTA.errorMessage = e.getMessage();
+            RTA.isError = true;
+            RTA.statusCode = 500;
+        }
+        
+        return RTA;
+    }
+    
+
+        @HTTPput
+    global static MessageDefault_JSON upsertS(String Id,String name, String estado){
+        MessageDefault_JSON RTA = new MessageDefault_JSON();
+        try{ 
+        Subscripcion__c SUpdate =new Subscripcion__c(
+        id =Id,
+        Name=name,
+        status__c=estado
+        );
+       upsert SUpdate;
+       // return countryUpdate.Id;
+            RTA.subscripcions = new List<Subscripcion__c>{SUpdate};
+            RTA.statusCode = 200;
+            RTA.isError = false;
+            RTA.sucess ='subscripcion modificada';
+         }catch(Exception e){
+            System.debug(e);
+            RTA.errorMessage = e.getMessage();
+            RTA.isError = true;
+            RTA.statusCode = 500;
+        }
+        
+        return RTA;
+    }
+
+@HttpDelete
+    global static MessageDefault_JSON deleteCountries(){
+        
+    RestRequest request = RestContext.request;
+    String subscripcionId = request.requestURI.substring(
+    request.requestURI.lastIndexOf('/')+1);
+        
+        MessageDefault_JSON RTA = new MessageDefault_JSON();
+        
+        try{
+            Subscripcion__c thisS =[SELECT Id FROM Subscripcion__c WHERE Id = :subscripcionId];
+           
+            delete thisS;
+  
+            RTA.subscripcions = new List<Subscripcion__c> {thisS};
+            RTA.sucess = 'record deleted';
+            RTA.isError = false;
+            RTA.statusCode =200;
+            
+        }catch(Exception e){
+            system.debug(e);
+            RTA.errorMessage = e.getMessage();
+            RTA.isError = true;
+            RTA.statusCode =500;
+        }
+
+    return RTA;
+  }
+    }

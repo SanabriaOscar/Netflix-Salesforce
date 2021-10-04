@@ -1,0 +1,31 @@
+
+@isTest
+public class test_exit_subscription {
+    
+    
+    static testMethod void test_GetSubscripcions(){
+        Test.startTest();
+        SubscriptionClass mySubscription = new SubscriptionClass();
+        List<Subscripcion__c> mySubs = mySubscription.getSubscripcions();
+       System.assertEquals(1, mySubs.size());
+        Test.stopTest();
+    }
+    static testMethod void test_GetContacts(){
+        Test.startTest();
+          SubscriptionClass contacts = new SubscriptionClass();
+            List<Contact> ContList = contacts.getContacts();
+        	System.assertEquals(1, ContList.size());
+        Test.stopTest();
+    }
+    
+    
+    @testSetup
+    static void setupData(){
+        List<Contact> Con= DataClassFactory.AddContact();
+        insert Con; 
+        
+        List<Subscripcion__c> Subscrip = DataClassFactory.AddSubscription(Con);
+        insert Subscrip;
+        
+    }
+}

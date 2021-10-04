@@ -1,0 +1,7 @@
+global class MessageDefault_JSON {
+ public List<subscripcion__c> subscripcions;
+    public boolean isError;
+    public string errorMessage;
+        public String sucess;
+    public integer statusCode;
+}
